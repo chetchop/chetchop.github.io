@@ -1,6 +1,11 @@
-body{
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.https://raw.githubusercontent.com/chetchop/chetchop.github.io/master/Images/sky.jpg?token=ANva31aUxHyVYjH6PY91SV04lgfEt5G6ks5WCr8YwA%3D%3D', sizingMethod='scale');
-	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://raw.githubusercontent.com/chetchop/chetchop.github.io/master/Images/sky.jpg?token=ANva31aUxHyVYjH6PY91SV04lgfEt5G6ks5WCr8YwA%3D%3D', sizingMethod='scale')";
+#bg {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+	
+  /* Preserve aspet ratio */
+  min-width: 100%;
+  min-height: 100%;
 }
 
 #headings h1{
