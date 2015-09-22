@@ -5,10 +5,24 @@ body {
     background-position: center center;            /* optionally, center the image */
 }
 
-#headings h1{
-     color:blue;
+#headings .intro {
+     color:white;
      text-align: center;
      padding-top: 25%;
+     font-family: 'Lato';
 
 }
 
+#headings .intro name {
+	 color: red;
+
+}
+
+#headings h2 {
+	font-family: 'Lato';
+	border-style: solid;
+	border-width: 1px;
+	padding-top: none;
+	display: inline;
+	text-align: center;
+}
