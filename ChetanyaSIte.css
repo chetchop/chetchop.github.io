@@ -1,9 +1,9 @@
 body{
-	background-image: url('chetchop.github.io/Images/sky.jpg');
+	background-image: url('https://raw.githubusercontent.com/chetchop/chetchop.github.io/master/Images/sky.jpg?token=ANva35WZ7YfscmbfLXo7j7gWVxM6b7Yaks5WCrtwwA%3D%3D');
 }
 
 #headings h1{
-     color:blue;
+     color:red;
 
 }
 
