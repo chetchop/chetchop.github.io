@@ -1,11 +1,8 @@
-#bg {
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-	
-  /* Preserve aspet ratio */
-  min-width: 100%;
-  min-height: 100%;
+body {
+    background-image:  url('https://raw.githubusercontent.com/chetchop/chetchop.github.io/master/Images/sky.jpg?token=ANva3-UpL0WBhcsPG1PV6TbWAGpyDVQXks5WCsEIwA%3D%3D');
+    background-size:   cover;                      /* <------ */
+    background-repeat: no-repeat;
+    background-position: center center;            /* optionally, center the image */
 }
 
 #headings h1{
