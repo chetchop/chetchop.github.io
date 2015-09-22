@@ -10,29 +10,37 @@ body {
      text-align: center;
      padding-top: 25%;
      font-family: 'Lato';
+     font-weight: 100;
 
 }
 
 #headings .intro name {
 	 color: blue;
-	 //font-weight: 100;
+	 font-weight: bold;
 
 }
 
 #Enter {
-	padding-left:46%;
-	padding-right:46%;
-
-
+	text-align: center;
 }
 
-h2 {
+#Enter a {
 	border-style: solid;
 	font-family: 'Lato';
+	font-size:25px;
+	font-weight: bold;
+	color: black;
 	text-align: center;
+	padding: 5px;
 	border-width: 1px;
+	display: inline;
+	border-radius: 20px;
+	border-color: black;
+	text-decoration: none;
+}
 
-
-	
-
+#Enter a:hover {
+    color: #3D9970;
+    border-color: #3D9970;
+    border-radius: 0px;
 }
