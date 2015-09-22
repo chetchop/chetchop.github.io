@@ -1,19 +1,6 @@
-#bg {
-  position: fixed; 
-  top: -50%; 
-  left: -50%; 
-  width: 200%; 
-  height: 200%;
-}
-#bg img {
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
-  margin: auto; 
-  min-width: 25%;
-  min-height: 25%;
+body{
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.https://raw.githubusercontent.com/chetchop/chetchop.github.io/master/Images/sky.jpg?token=ANva31aUxHyVYjH6PY91SV04lgfEt5G6ks5WCr8YwA%3D%3D', sizingMethod='scale');
+	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://raw.githubusercontent.com/chetchop/chetchop.github.io/master/Images/sky.jpg?token=ANva31aUxHyVYjH6PY91SV04lgfEt5G6ks5WCr8YwA%3D%3D', sizingMethod='scale')";
 }
 
 #headings h1{
