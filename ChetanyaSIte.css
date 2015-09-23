@@ -1,8 +1,8 @@
 body {
     background-image:  url('https://raw.githubusercontent.com/chetchop/chetchop.github.io/master/Images/sky.jpg?token=ANva3-UpL0WBhcsPG1PV6TbWAGpyDVQXks5WCsEIwA%3D%3D');
-    background-size:   cover;                      /* <------ */
+    background-size: cover;                      /* <------ */
     background-repeat: no-repeat;
-    background-position: center center;            /* optionally, center the image */
+    background-position: center center;          /* optionally, center the image */
 }
 
 #headings .intro {
@@ -17,6 +17,7 @@ body {
 #headings .intro name {
 	 color: blue;
 	 font-weight: bold;
+
 
 }
 
@@ -37,10 +38,39 @@ body {
 	border-radius: 20px;
 	border-color: black;
 	text-decoration: none;
+	//cursor: pointer;
+
 }
+
 
 #Enter a:hover {
     color: #3D9970;
     border-color: #3D9970;
+    //-webkit-animation-duration: 1s;
+    //-webkit-animation-timing-function: linear;
+    //-webkit-animation-name:"rotate";
+    //-webkit-animation-fill-mode: forwards; 
+    //-webkit-animation-iteration-count: 1;//infinite;
+    //-webkit-animation-delay: 2s;
     border-radius: 0px;
+
 }
+
+
+#Enter a:active {
+    color: #85144b;
+}
+
+
+
+@-webkit-keyframes rotate {
+    100% {
+        background-color: #3D9970;
+        color: red;
+        padding-top: 5%;
+        padding-bottom: 5%;
+        padding-left: 15%;
+        padding-right: 15%;
+        opacity: .3;
+    }  
+ }
