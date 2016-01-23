@@ -101,8 +101,8 @@ Background.prototype.update = function () {
 // }
 
 function Unicorn(game) {
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/stickmansprite.png"),ASSET_MANAGER.getAsset("./img/pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
-    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/stickmansprite.png"), ASSET_MANAGER.getAsset("./img/pokebackground.jpg"), 0, 0, 180, 340, 0.009, 70, false, false);
+    this.animation = new Animation(ASSET_MANAGER.getAsset("stickmansprite.png"),ASSET_MANAGER.getAsset("pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
+    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("stickmansprite.png"), ASSET_MANAGER.getAsset("pokebackground.jpg"), 0, 0, 180, 340, 0.009, 70, false, false);
     this.jumping = false;
     this.radius = 100;
     this.ground = 400;
@@ -121,7 +121,7 @@ Unicorn.prototype.update = function () {
         if (anspeed > 0.001) {
             anspeed -= 0.001;
         }
-        this.animation = new Animation(ASSET_MANAGER.getAsset("./img/stickmansprite.png"),ASSET_MANAGER.getAsset("./img/pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
+        this.animation = new Animation(ASSET_MANAGER.getAsset("stickmansprite.png"),ASSET_MANAGER.getAsset("pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
         console.log(" animation: " + this.animation.frameDuration);
 
     }
@@ -134,7 +134,7 @@ Unicorn.prototype.update = function () {
         if (anspeed < 0.04) {
             anspeed += 0.001;
         }
-        this.animation = new Animation(ASSET_MANAGER.getAsset("./img/stickmansprite.png"),ASSET_MANAGER.getAsset("./img/pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
+        this.animation = new Animation(ASSET_MANAGER.getAsset("stickmansprite.png"),ASSET_MANAGER.getAsset("pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
         console.log(backshift);
 
         console.log(" animation: " + this.animation.frameDuration);
@@ -187,9 +187,9 @@ Unicorn.prototype.draw = function (ctx) {
 
 var ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("./img/stickmansprite.png");
+ASSET_MANAGER.queueDownload("stickmansprite.png");
 
-ASSET_MANAGER.queueDownload("./img/pokebackground.jpg");
+ASSET_MANAGER.queueDownload("pokebackground.jpg");
 
 //ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
 
