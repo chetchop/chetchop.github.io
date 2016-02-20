@@ -1,210 +1,301 @@
-var bx = 0;
-var bx2 = 0;
-var backshift = 4;
-var anspeed = 0.04;
+
+// GameBoard code below
+var wait = 0;
+var color = getRandomColor();
+
+function distance(a, b) {
+    var dx = a.x - b.x;
+    var dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
+};
 
 
-function Animation(spriteSheet, back, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse) {
-    this.spriteSheet = spriteSheet;
-    this.back = back;
-    this.startX = startX;
-    this.startY = startY;
-    this.frameWidth = frameWidth;
-    this.frameDuration = frameDuration;
-    this.frameHeight = frameHeight;
-    this.frames = frames;
-    this.totalTime = frameDuration * frames;
-    this.elapsedTime = 0;
-    this.loop = loop;
-    this.reverse = reverse;
+function bar(game, w, h, px, py, transport) {
+    this.transport = transport;
+    this.width = w;
+    this.height = h;
+    this.posx = px;
+    this.posy = py;
+    Entity.call(this, game, this.posx, this.posy);
+};
+
+bar.prototype = new Entity();
+bar.prototype.constructor = bar;
+
+bar.prototype.collide = function (other) {
+    return (other.y + other.radius > this.posy && other.y - other.radius < this.posy 
+        + this.height && other.x + other.radius > this.posx && other.x - other.radius 
+        < this.posx + this.width);
 }
 
-Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
-    var scaleBy = scaleBy || 1;
-    this.elapsedTime += tick;
-    if (this.loop) {
-        if (this.isDone()) {
-            this.elapsedTime = 0;
-        }
-    } else if (this.isDone()) {
-        return;
-    }
-    var index = this.reverse ? this.frames - this.currentFrame() - 1 : this.currentFrame();
-    var vindex = 0;
-    // if ((index + 1) * this.frameWidth + this.startX > this.spriteSheet.width) {
-        if ((index + 1) * this.frameWidth + this.startX > this.spriteSheet.width) {
-        index -= Math.floor((this.spriteSheet.width - this.startX) / this.frameWidth);
-        vindex++;
-    }
-    while ((index + 1) * this.frameWidth > this.spriteSheet.width) {
-        index -= Math.floor(this.spriteSheet.width / this.frameWidth);
-        vindex++;
-    }
-
-    var locX = x;
-    var locY = y - 173;
-    var offset = vindex === 0 ? this.startX : 0;
-    
-    ctx.drawImage(this.back,
-                 0, 0,  // source from sheet
-                 800, 500,
-                 -bx2 + 800, 0,
-                 //0, 0,
-                 //-x + 800, y,
-                 800,
-                 500);
-
-    ctx.drawImage(this.back,
-             0, 0,  // source from sheet
-             800, 500,
-             //0, 0,
-             -bx, 0,
-             //-x, y,
-             800,
-             500);
-
-    console.log("x: " + index * this.frameWidth + offset
-        + " |y: " + vindex * this.frameHeight + this.startY)
-    ctx.drawImage(this.spriteSheet,
-                  index * this.frameWidth + offset, vindex * this.frameHeight + this.startY,  // source from sheet
-                  this.frameWidth, this.frameHeight,
-                  locX, locY,
-                  this.frameWidth * 0.5,
-                  this.frameHeight * 0.5);
-
-
-}
-
-Animation.prototype.currentFrame = function () {
-    return Math.floor(this.elapsedTime / this.frameDuration);
-}
-
-Animation.prototype.isDone = function () {
-    return (this.elapsedTime >= this.totalTime);
-}
-
-function Background(game) {
-    Entity.call(this, game, 0, 400);
-    this.radius = 200;
-}
-
-Background.prototype = new Entity();
-Background.prototype.constructor = Background;
-
-Background.prototype.update = function () {
-}
-
-// Background.prototype.draw = function (ctx) {
-//     ctx.fillStyle = "SaddleBrown";
-//     ctx.fillRect(0,500,800,300);
-//     Entity.prototype.draw.call(this);
-// }
-
-function Unicorn(game) {
-    this.animation = new Animation(ASSET_MANAGER.getAsset("Images/stickmansprite.png"),ASSET_MANAGER.getAsset("Images/pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
-    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("Images/stickmansprite.png"), ASSET_MANAGER.getAsset("Images/pokebackground.jpg"), 0, 0, 180, 340, 0.009, 70, false, false);
-    this.jumping = false;
-    this.radius = 100;
-    this.ground = 400;
-    Entity.call(this, game, 0, 400);
-}
-
-Unicorn.prototype = new Entity();
-Unicorn.prototype.constructor = Unicorn;
-
-Unicorn.prototype.update = function () {
-
-
-    if (this.game.rkey) {
-        console.log(this.game.rkey);
-        backshift += 2;
-        if (anspeed > 0.001) {
-            anspeed -= 0.001;
-        }
-        this.animation = new Animation(ASSET_MANAGER.getAsset("Images/stickmansprite.png"),ASSET_MANAGER.getAsset("Images/pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
-        console.log(" animation: " + this.animation.frameDuration);
-
-    }
-
-    if (this.game.lkey) {//} && backshift > 4) {
-        console.log(this.game.lkey)
-        if (backshift > 4) {
-            backshift -= 4;
-        }
-        if (anspeed < 0.04) {
-            anspeed += 0.001;
-        }
-        this.animation = new Animation(ASSET_MANAGER.getAsset("Images/stickmansprite.png"),ASSET_MANAGER.getAsset("Images/pokebackground.jpg"), 0, 0, 180, 340, anspeed, 70, true, false);
-        console.log(backshift);
-
-        console.log(" animation: " + this.animation.frameDuration);
-    }
-    bx += backshift;
-    bx2 += backshift;
-
-    //if (this.game.space) this.jumping = true;, 
-    //console.log(this.game.space + "" + this.game.lkey);
-    if (this.game.space) this.jumping = true;
-    if (this.jumping) {
-        if (this.jumpAnimation.isDone()) {
-            this.jumpAnimation.elapsedTime = 0;
-            this.jumping = false;
-        }
-        var jumpDistance = this.jumpAnimation.elapsedTime / this.jumpAnimation.totalTime;
-        var totalHeight = 100;
-
-        if (jumpDistance > 0.5)
-            jumpDistance = 1 - jumpDistance;
-
-        //var height = jumpDistance * 2 * totalHeight;
-        var height = totalHeight * (-4 * (jumpDistance * jumpDistance - jumpDistance ));
-        this.y = this.ground - height;
-    }
-
-
+bar.prototype.update = function () {
     Entity.prototype.update.call(this);
+
+        for (var i = 0; i < this.game.entities.length; i++) {
+        var ent = this.game.entities[i];
+
+        if(ent !== this && this.collide(ent) && this.transport == true) {
+            ent.x = Math.floor(Math.random() * (800 - 0)) + 0;
+            ent.y = Math.floor(Math.random() * (800 - 0)) + 0;
+        }
+
+        if (ent !== this && this.collide(ent)) {
+            //color = getRandomColor();
+
+           //RIGHT
+           if (ent.velocity.x < 0 && ent.velocity.y < 0 && ent.x > this.posx + this.width) {
+                ent.velocity.x = -ent.velocity.x * friction;
+                ent.velocity.y = ent.velocity.y * friction;
+           } else if (ent.velocity.x < 0 && ent.velocity.y > 0 && ent.x > this.posx + this.width) {
+                ent.velocity.x = -ent.velocity.x * friction;
+                ent.velocity.y = ent.velocity.y * friction;
+           //BOTTOM
+           } else if (ent.velocity.x > 0 && ent.velocity.y < 0 && ent.y > this.posy + this.height) {
+                ent.velocity.x = ent.velocity.x * friction;
+                ent.velocity.y = -ent.velocity.y * friction;
+           } else if (ent.velocity.x < 0 && ent.velocity.y < 0 && ent.y > this.posy + this.height) {
+                ent.velocity.x = ent.velocity.x * friction;
+                ent.velocity.y = -ent.velocity.y * friction;
+           //LEFT
+           } else if (ent.velocity.x > 0 && ent.velocity.y > 0 && ent.x < this.posx) {
+                ent.velocity.x = -ent.velocity.x * friction;
+                ent.velocity.y = ent.velocity.y * friction;
+           } else if (ent.velocity.x > 0 && ent.velocity.y < 0 && ent.x < this.posx) {
+                ent.velocity.x = -ent.velocity.x * friction;
+                ent.velocity.y = ent.velocity.y * friction;
+           //TOP
+           } else if (ent.velocity.x < 0 && ent.velocity.y > 0 && ent.y <  this.posy) {
+                ent.velocity.x = ent.velocity.x * friction;
+                ent.velocity.y = -ent.velocity.y * friction;
+           } else if (ent.velocity.x > 0 && ent.velocity.y > 0 && ent.y <  this.posy) {
+                ent.velocity.x = ent.velocity.x * friction;
+                ent.velocity.y = -ent.velocity.y * friction;
+           }
+
+
+        }
+    }
+
 }
 
-Unicorn.prototype.draw = function (ctx) {
-    if (bx > 800) {
-        bx = 0;
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
     }
-    if (bx2 > 800) {
-        bx2 = 0;
-    }
-    if (this.jumping) {
-        this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y-34);
-        //this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x + 17, this.y - 34);
-        
-    }
-    else {
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-    }
-    Entity.prototype.draw.call(this);
+    return color;
 }
+
+bar.prototype.draw = function (ctx) {
+    wait++;
+    ctx.fillStyle = color;
+    if(wait > 2000) {
+        color = getRandomColor();
+        wait = 0;
+    }
+    ctx.fillRect(this.posx, this.posy, this.width, this.height);
+};
+
+
+
+
+function Circle(game) {
+    this.player = 1;
+    this.radius = 20;
+    this.visualRadius = 500;
+    this.colors = ["Red", "Green", "Blue", "White"];
+    this.setNotIt();
+    Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
+    this.velocity = { x: Math.random() * 1000, y: Math.random() * 1000 };
+    var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+    if (speed > maxSpeed) {
+        var ratio = maxSpeed / speed;
+        this.velocity.x *= ratio;
+        this.velocity.y *= ratio;
+    }
+};
+
+
+Circle.prototype = new Entity();
+Circle.prototype.constructor = Circle;
+
+Circle.prototype.setIt = function () {
+    this.it = true;
+    this.color = 0;
+    this.visualRadius = 500;
+};
+
+Circle.prototype.setNotIt = function () {
+    this.it = false;
+    this.color = 3;
+    this.visualRadius = 200;
+};
+
+Circle.prototype.collide = function (other) {
+    return distance(this, other) < this.radius + other.radius;
+};
+
+Circle.prototype.collideLeft = function () {
+    return (this.x - this.radius) < 0;
+};
+
+Circle.prototype.collideRight = function () {
+    return (this.x + this.radius) > 800;
+};
+
+Circle.prototype.collideTop = function () {
+    return (this.y - this.radius) < 0;
+};
+
+Circle.prototype.collideBottom = function () {
+    return (this.y + this.radius) > 800;
+};
+
+Circle.prototype.update = function () {
+    Entity.prototype.update.call(this);
+
+    
+   
+    this.x += this.velocity.x * this.game.clockTick;
+    this.y += this.velocity.y * this.game.clockTick;
+
+    if (this.collideLeft() || this.collideRight()) {
+        this.velocity.x = -this.velocity.x * friction;
+        if (this.collideLeft()) this.x = this.radius;
+        if (this.collideRight()) this.x = 800 - this.radius;
+        this.x += this.velocity.x * this.game.clockTick;
+        this.y += this.velocity.y * this.game.clockTick;
+    }
+
+    if (this.collideTop() || this.collideBottom()) {
+        this.velocity.y = -this.velocity.y * friction;
+        if (this.collideTop()) this.y = this.radius;
+        if (this.collideBottom()) this.y = 800 - this.radius;
+        this.x += this.velocity.x * this.game.clockTick;
+        this.y += this.velocity.y * this.game.clockTick;
+    }
+
+    for (var i = 0; i < this.game.entities.length; i++) {
+        var ent = this.game.entities[i];
+        if (ent !== this && this.collide(ent)) {
+            
+            var temp = { x: this.velocity.x, y: this.velocity.y };
+
+            var dist = distance(this, ent);
+            var delta = this.radius + ent.radius - dist;
+            var difX = (this.x - ent.x)/dist;
+            var difY = (this.y - ent.y)/dist;
+
+            this.x += difX * delta / 2;
+            this.y += difY * delta / 2;
+            ent.x -= difX * delta / 2;
+            ent.y -= difY * delta / 2;
+
+            this.velocity.x = ent.velocity.x * friction;
+            this.velocity.y = ent.velocity.y * friction;
+            ent.velocity.x = temp.x * friction;
+            ent.velocity.y = temp.y * friction;
+            this.x += this.velocity.x * this.game.clockTick;
+            this.y += this.velocity.y * this.game.clockTick;
+            ent.x += ent.velocity.x * this.game.clockTick;
+            ent.y += ent.velocity.y * this.game.clockTick;
+            if (this.it) {
+                this.setNotIt();
+                ent.setIt();
+            }
+            else if (ent.it) {
+                this.setIt();
+                ent.setNotIt();
+            }
+        }
+
+        // if (ent !== this && this.collide({ x: ent.x, y: ent.y, radius: this.visualRadius })) {
+        //     var dist = distance(this, ent);
+        //     if (this.it && dist > this.radius + ent.radius + 10) {
+        //         var difX = (ent.x - this.x)/dist;
+        //         var difY = (ent.y - this.y)/dist;
+        //         this.velocity.x += difX * acceleration / (dist*dist);
+        //         this.velocity.y += difY * acceleration / (dist * dist);
+        //         var speed = Math.sqrt(this.velocity.x*this.velocity.x + this.velocity.y*this.velocity.y);
+        //         if (speed > maxSpeed) {
+        //             var ratio = maxSpeed / speed;
+        //             this.velocity.x *= ratio;
+        //             this.velocity.y *= ratio;
+        //         }
+        //     }
+        //     if (ent.it && dist > this.radius + ent.radius) {
+        //         var difX = (ent.x - this.x) / dist;
+        //         var difY = (ent.y - this.y) / dist;
+        //         this.velocity.x -= difX * acceleration / (dist * dist);
+        //         this.velocity.y -= difY * acceleration / (dist * dist);
+        //         var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+        //         if (speed > maxSpeed) {
+        //             var ratio = maxSpeed / speed;
+        //             this.velocity.x *= ratio;
+        //             this.velocity.y *= ratio;
+        //         }
+        //     }
+        // }
+    }
+
+
+    this.velocity.x -= (1 - friction) * this.game.clockTick * this.velocity.x;
+    this.velocity.y -= (1 - friction) * this.game.clockTick * this.velocity.y;
+};
+
+Circle.prototype.draw = function (ctx) {
+    ctx.beginPath();
+    ctx.fillStyle = this.colors[this.color];
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fill();
+    ctx.closePath();
+};
+
+
+
 
 // the "main" code begins here
+var friction = 1;
+var acceleration = 1000000;
+var maxSpeed = 200;
 
 var ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("Images/stickmansprite.png");
-
-ASSET_MANAGER.queueDownload("Images/pokebackground.jpg");
-
-//ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
+ASSET_MANAGER.queueDownload("./img/960px-Blank_Go_board.png");
+ASSET_MANAGER.queueDownload("./img/black.png");
+ASSET_MANAGER.queueDownload("./img/white.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("starting up da sheild");
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
 
-    var gameEngine = new GameEngine();
-    //var bg = new Background(gameEngine);
-    var unicorn = new Unicorn(gameEngine);
 
-    //gameEngine.addEntity(bg);
-    gameEngine.addEntity(unicorn);
- 
+    var gameEngine = new GameEngine();
+    var circle = new Circle(gameEngine);
+
+    circle.setIt();
+    gameEngine.addEntity(circle);
+    for (var i = 0; i < 12; i++) {
+        circle = new Circle(gameEngine);
+        gameEngine.addEntity(circle);
+    }
+
+    for (var i = 50; i < 800; i+=200) {
+        for (var j = 50; j < 600; j+=200) {
+            var block = new bar(gameEngine, 100, 100, j, i, false);
+            gameEngine.addEntity(block);
+        }
+        var block1 = new bar(gameEngine, 100, 100, j, i,false);
+        gameEngine.addEntity(block1);
+    }
+
+    var block2 = new bar(gameEngine, 25, 25, 387.5, 387.5, true);
+    gameEngine.addEntity(block2);
+   
+
+    console.log(gameEngine.entities);
     gameEngine.init(ctx);
     gameEngine.start();
 });
